@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,13 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body {
-            position: relative; 
-            margin: 0; 
+            position: relative;
+            margin: 0;
             padding: 0;
-            /* 鼠标指针：仓库根目录的 ryoko_cursor.png */
-            cursor: url('./ryoko_cursor.png'), auto;
+            /* 替换为32×32px透明山田凉头像（稳定图床链接） */
+            cursor: url('https://imgtu.com/images/2025/11/15/ryoko_cursor_32.png'), auto;
+            overflow: hidden; /* 隐藏流星超出屏幕部分导致的滚动条 */
         }
-        /* 背景图：仓库根目录的 bg_main.jpg */
+        /* 背景图伪元素 */
         body::before {
             content: "";
             position: absolute;
@@ -20,61 +22,106 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('./bg_main.jpg');
+            background-image: url("https://www.imgur.la/images/2025/11/13/_20251113131324_338_2.md.jpg");
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.5; 
-            z-index: -1; 
+            opacity: 0.5;
+            z-index: -1;
         }
         /* 内容全局居中 */
         .container {
-            text-align: center; 
-            margin: 0 auto; 
+            text-align: center;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1; /* 确保内容在流星之上 */
         }
         .side, .card, .post {
-            margin: 0 auto; 
+            margin: 0 auto;
         }
         ul.count {
-            list-style: none; 
-            padding: 0; 
-            text-align: center; 
+            list-style: none;
+            padding: 0;
+            text-align: center;
         }
-        /* 头像：仓库根目录的 ryoko_avatar.png */
+        /* 头像圆形边框 */
         .card img {
             width: 200px;
-            height: 200px; 
-            border-radius: 50%; 
-            object-fit: cover; 
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
         }
         /* 按钮样式 */
         .btn {
-            display: inline-block; 
-            background-color: #00008B; 
-            color: #fff; 
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            text-decoration: none; 
+            display: inline-block;
+            background-color: #00008B;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
             margin-top: 10px;
         }
         .btn:hover {
-            background-color: #000066; 
+            background-color: #000066;
         }
         /* 原有样式优化 */
         .card {
             padding: 20px;
+            background-color: rgba(255, 255, 255, 0.7); /* Added background for better visibility */
+            border-radius: 10px;
         }
         .excerpt {
             color: #00008B;
             line-height: 1.8;
+            background-color: rgba(255, 255, 255, 0.7); /* Added background for better visibility */
+            padding: 10px;
+            border-radius: 10px;
         }
         .footer small {
             color: #00008B;
         }
+
+        /* --- 🌠 优化后的流星效果样式 🌠 --- */
+        .meteor-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -2;
+            perspective: 500px; /* 增加3D透视效果，让流星看起来更自然 */
+        }
+
+        .meteor {
+            position: absolute;
+            /* 宽度和高度将在 JS 中随机设置 */
+            background: linear-gradient(to top, rgba(255, 255, 255, 0) 50%, #fff 100%);
+            /* 增加发光效果 */
+            box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.8), 
+                        0 0 10px 4px rgba(255, 255, 255, 0.4);
+            transform-origin: bottom center;
+            opacity: 0;
+        }
+
+        /* 统一的坠落动画 */
+        @keyframes meteor-fall {
+            0% {
+                transform: rotate(135deg) translateY(-100vh);
+                opacity: 0.8; /* 起始更明显 */
+            }
+            70% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(135deg) translateY(100vh);
+                opacity: 0; /* 结束时消失 */
+            }
+        }
     </style>
 </head>
 <body>
-    <header class="banner">
+    <div class="meteor-container"></div> <header class="banner">
         <div class="container">
             <strong>哈喽友友们</strong> 这是我的主页~
         </div>
@@ -82,9 +129,8 @@
     <div class="container main">
         <aside class="side">
             <div class="card">
-                <!-- 头像链接：仓库根目录的 ryoko_avatar.png -->
-                <a href="./ryoko_avatar.png">
-                    <img src="./ryoko_avatar.png" alt="凉">
+                <a href="https://www.imgur.la/image/%E5%B1%B1%E5%A4%A9%E4%BA%AE.6R1g67">
+                    <img src="https://www.imgur.la/images/2025/11/13/31b8e67facb8ec426b4e27d0dc22f263.md.png" alt="凉">
                 </a>
                 <h1 class="name">贩客</h1>
                 <p class="bio">19岁</p>
@@ -108,19 +154,63 @@
     </div>
     <footer class="footer">
         <div class="container">
-            <small>© 2025 贩客  想认识我？来！ fk173201（微信号）</small>
+            <small>© 2025 贩客 想认识我？来！ fk173201（微信号）</small>
         </div>
     </footer>
-    <!-- 标签页标题切换 -->
     <script>
         const originalTitle = document.title;
         document.addEventListener('visibilitychange', () => {
             document.title = document.hidden ? '不要我了吗呜呜' : originalTitle;
         });
+
+        // --- 🌠 优化后的流星效果脚本 🌠 ---
+        const meteorContainer = document.querySelector('.meteor-container');
+        const numMeteors = 15; // 增加流星数量
+        const fallAngle = '135deg'; // 统一的坠落角度
+
+        function createMeteor(index) {
+            const meteor = document.createElement('div');
+            meteor.classList.add('meteor');
+
+            // 1. 随机位置
+            const startX = Math.random() * 100;
+            // 2. 随机速度 (2.5s to 7s)
+            const duration = Math.random() * 4.5 + 2.5;
+            // 3. 随机延迟 (避免同时出现，更自然)
+            const delay = Math.random() * 15;
+            // 4. 随机大小/长度 (增强层次感)
+            const size = Math.random() * 2 + 1; // 宽度 1px 到 3px
+            const length = Math.random() * 80 + 100; // 长度 100px 到 180px
+
+            meteor.style.left = `${startX}vw`;
+            meteor.style.width = `${size}px`;
+            meteor.style.height = `${length}px`;
+
+            // 5. 应用动画
+            meteor.style.animation = `meteor-fall ${duration}s linear infinite`;
+            meteor.style.animationDelay = `${delay}s`;
+            
+            // 6. 随机透明度/颜色（可选，这里用 box-shadow 替代了颜色变化）
+            const opacity = Math.random() * 0.4 + 0.6; // 0.6 到 1.0 的透明度
+            meteor.style.opacity = opacity;
+
+            // 7. 随机 z-index (模拟距离，配合 box-shadow)
+            meteor.style.zIndex = Math.round(Math.random() * 10); 
+            
+            // 8. 随机角度微调 (让流星轨道不完全平行，更自然)
+            // meteor.style.transform = `rotate(${Math.random() * 10 + 130}deg)`; 
+            // 统一在 @keyframes 里控制 135deg，避免冲突，效果更整齐
+
+            meteorContainer.appendChild(meteor);
+        }
+
+        // 创建初始流星
+        for (let i = 0; i < numMeteors; i++) {
+            createMeteor(i);
+        }
     </script>
 </body>
 </html>
         
 
-        
 
