@@ -5,17 +5,42 @@
     <title>今天想不开也吃草吗？</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
+        /* 新增：下雨效果容器 */
+        .rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* 雨滴在背景和内容之间 */
+            pointer-events: none; /* 不影响鼠标交互 */
+        }
+        /* 雨滴样式 */
+        .rain-drop {
+            position: absolute;
+            width: 1px;
+            background: rgba(255, 255, 255, 0.7);
+            animation: fall linear infinite;
+        }
+        /* 雨滴下落动画 */
+        @keyframes fall {
+            0% { transform: translateY(-10px); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
         body {
-            position: relative;
-            margin: 0;
+            position: relative; 
+            margin: 0; 
             padding: 0;
-            min-height: 100vh; /* 确保页面高度铺满屏幕 */
+            min-height: 150vh; /* 新增：让页面高度超过视口，支持上下滑动 */
             cursor: url('./ryoko_cursor.png'), auto;
         }
-        /* 背景图 */
+        /* 背景图伪元素 */
         body::before {
             content: "";
-            position: absolute;
+            position: fixed; /* 修改为fixed，避免滚动时背景位移 */
             top: 0;
             left: 0;
             width: 100%;
@@ -24,84 +49,50 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.5;
-            z-index: -1;
+            opacity: 0.5; 
+            z-index: -1; 
         }
-
-        /* --- 优化后的流星效果 --- */
-        .shooting-star-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .star {
-            position: absolute;
-            background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
-            border-radius: 50%;
-            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* 更柔和的光晕 */
-            animation: shooting-star linear forwards;
-            opacity: 0;
-        }
-
-        /* 更自然的流星轨迹动画 */
-        @keyframes shooting-star {
-            0% {
-                transform: translateX(0) translateY(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1; /* 缓慢显现 */
-            }
-            90% {
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateX(calc(-100vw - 200px)) translateY(calc(100vh * 0.5));
-                opacity: 0; /* 自然消失 */
-            }
-        }
-        
-        /* --- 原有样式保持不变 --- */
+        /* 内容全局居中 */
         .container {
-            text-align: center;
-            margin: 0 auto;
-            position: relative; /* 确保内容在流星上层 */
-            z-index: 1;
+            text-align: center; 
+            margin: 0 auto; 
+            position: relative;
+            z-index: 1; /* 确保内容在雨滴上方 */
+            padding: 20px;
         }
         .side, .card, .post {
-            margin: 0 auto;
+            margin: 0 auto; 
+            max-width: 800px; /* 限制内容宽度，优化大屏显示 */
         }
         ul.count {
-            list-style: none;
-            padding: 0;
-            text-align: center;
+            list-style: none; 
+            padding: 0; 
+            text-align: center; 
         }
+        /* 头像圆形边框 */
         .card img {
             width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
+            height: 200px; 
+            border-radius: 50%; 
+            object-fit: cover; 
         }
+        /* 按钮样式 */
         .btn {
-            display: inline-block;
-            background-color: #00008B;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
+            display: inline-block; 
+            background-color: #00008B; 
+            color: #fff; 
+            padding: 8px 16px; 
+            border-radius: 8px; 
+            text-decoration: none; 
             margin-top: 10px;
         }
         .btn:hover {
-            background-color: #000066;
+            background-color: #000066; 
         }
+        /* 原有样式优化 */
         .card {
             padding: 20px;
+            margin-bottom: 40px; /* 增加间距，让内容更长 */
         }
         .excerpt {
             color: #00008B;
@@ -110,11 +101,18 @@
         .footer small {
             color: #00008B;
         }
+        /* 页脚固定在底部上方 */
+        .footer {
+            position: relative;
+            margin-top: 50px;
+            padding: 20px 0;
+        }
     </style>
 </head>
 <body>
-    <div class="shooting-star-container" id="starContainer"></div>
-    
+    <!-- 新增：下雨效果容器 -->
+    <div class="rain" id="rain"></div>
+
     <header class="banner">
         <div class="container">
             <strong>哈喽友友们</strong> 这是我的主页~
@@ -123,6 +121,7 @@
     <div class="container main">
         <aside class="side">
             <div class="card">
+                <!-- 头像链接：仓库根目录的 ryoko_avatar.png -->
                 <a href="./ryoko_avatar.png">
                     <img src="./ryoko_avatar.png" alt="凉">
                 </a>
@@ -130,6 +129,7 @@
                 <p class="bio">19岁</p>
                 <ul class="count">
                     <li><b>沉迷睡大觉</b></li>
+                    <li><b>坐标深圳</b></li>
                     <li><b>美味的甜品和酷酷的凉酱使我旋转~</b></li>
                 </ul>
                 <a class="btn" href="mailto:3535709441@qq.com">我的邮箱</a>
@@ -138,9 +138,20 @@
                 <h2>我的简介</h2>
                 <p class="excerpt">
                     喜好甜品，旅游，等一切有趣的玩意<br>
+                    包括不限于分析哲学和奇奇怪怪的野史...<br>
                     爱好同人，虽然现在忙的啥也没看（（<br>
                     喜欢eve老师的歌曲OvO~<br>
-                    新奇的番剧烦请推我，我一定要抽时间看呜呜呜
+                    新奇的番剧请推我,我一定要抽时间看嗷嗷<br>
+                    <br>
+                    最近在学的东西：<br>
+                    - 前端基础（HTML/CSS/JS）<br>
+                    - 一点点Python<br>
+                    - 摄影入门<br>
+                    <br>
+                    近期想做的事：<br>
+                    - 去一次海边Citywalk<br>
+                    - 补完《孤独摇滚！》的漫画<br>
+                    - 尝试做一个简单的小游戏<br>
                 </p>
                 <div class="meta"></div>
             </article>
@@ -152,53 +163,41 @@
         </div>
     </footer>
 
+    <!-- 标签页标题切换 -->
     <script>
         const originalTitle = document.title;
         document.addEventListener('visibilitychange', () => {
             document.title = document.hidden ? '不要我了吗呜呜' : originalTitle;
         });
 
-        // --- 动态生成自然纤细的流星 ---
-        const starContainer = document.getElementById('starContainer');
-        
-        function createStar() {
-            const star = document.createElement('div');
-            star.classList.add('star');
-            
-            // 随机参数让流星更自然
-            const width = Math.random() * 1.5 + 0.5; // 0.5-2px 更纤细
-            const height = width * Math.random() * 20 + 10; // 长度随机（10-30倍宽度）
-            const startX = window.innerWidth + 200; // 从屏幕右侧外开始
-            const startY = Math.random() * window.innerHeight * 0.8; // 垂直位置随机
-            const duration = Math.random() * 4 + 2; // 动画时长2-6秒（速度不同）
-            const angle = Math.random() * 10 + 20; // 倾斜角度20-30度
-            
-            // 设置流星样式
-            star.style.width = `${width}px`;
-            star.style.height = `${height}px`;
-            star.style.right = `${startX}px`;
-            star.style.top = `${startY}px`;
-            star.style.transform = `rotate(${angle}deg)`;
-            star.style.animationDuration = `${duration}s`;
-            star.style.animationDelay = `${Math.random() * 2}s`; // 随机延迟
-            
-            // 添加到容器
-            starContainer.appendChild(star);
-            
-            // 动画结束后移除，避免DOM堆积
-            setTimeout(() => {
-                star.remove();
-            }, (duration + 2) * 1000);
+        // 新增：生成雨滴的JS代码
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
+            const rainCount = 150; // 雨滴数量，可调整
+
+            for (let i = 0; i < rainCount; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('rain-drop');
+                
+                // 随机位置、长度、速度、延迟
+                const left = Math.random() * 100; // 水平位置
+                const height = Math.random() * 15 + 5; // 雨滴长度
+                const duration = Math.random() * 2 + 0.5; // 下落速度
+                const delay = Math.random() * 5; // 延迟下落
+                
+                drop.style.left = `${left}%`;
+                drop.style.height = `${height}px`;
+                drop.style.animationDuration = `${duration}s`;
+                drop.style.animationDelay = `${delay}s`;
+                
+                rainContainer.appendChild(drop);
+            }
         }
-        
-        // 每隔1-3秒生成一颗流星
-        setInterval(createStar, Math.random() * 2000 + 1000);
-        
-        // 初始化生成几颗流星
-        for (let i = 0; i < 3; i++) {
-            setTimeout(createStar, Math.random() * 3000);
-        }
+
+        // 页面加载后生成雨滴
+        window.onload = createRain;
     </script>
 </body>
 </html>
+
 
