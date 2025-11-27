@@ -4,45 +4,18 @@
     <meta charset="UTF-8">
     <title>今天想不开也吃草吗？</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- 引入手写字体（马善政） -->
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <style>
-        /* 新增：下雨效果容器 */
-        .rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0; /* 雨滴在背景和内容之间 */
-            pointer-events: none; /* 不影响鼠标交互 */
-        }
-        /* 雨滴样式 */
-        .rain-drop {
-            position: absolute;
-            width: 1px;
-            background: rgba(255, 255, 255, 0.7);
-            animation: fall linear infinite;
-        }
-        /* 雨滴下落动画 */
-        @keyframes fall {
-            0% { transform: translateY(-10px); opacity: 0; }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% { transform: translateY(100vh); opacity: 0; }
-        }
-
         body {
-            position: relative; 
-            margin: 0; 
+            position: relative;
+            margin: 0;
             padding: 0;
-            min-height: 150vh; /* 让页面高度超过视口，支持上下滑动 */
-            cursor: url('./ryoko_cursor.png'), auto;
+            /* 🍒 CHERRY BLOSSOM CURSOR: 鼠标指针改为樱花图案 */
+            cursor: url('./ryoko_cursor.png'), auto; /* Fallback to default if image fails */
         }
-        /* 背景图伪元素 */
+        /* 背景图：仓库根目录的 bg_main.jpg */
         body::before {
             content: "";
-            position: fixed; /* 修改为fixed，避免滚动时背景位移 */
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
@@ -51,82 +24,137 @@
             background-size: cover;
             background-repeat: no-repeat;
             background-position: center;
-            opacity: 0.7; 
-            z-index: -1; 
+            opacity: 0.5;
+            z-index: -1;
         }
-        /* 内容全局居中 */
-        .container {
-            text-align: center; 
-            margin: 0 auto; 
-            position: relative;
-            z-index: 1; /* 确保内容在雨滴上方 */
-            padding: 20px;
+
+        /* --- SHOOTING STAR EFFECT STYLES (Retained from previous step) --- */
+
+        .shooting-star-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
         }
-        .side, .card, .post {
-            margin: 0 auto; 
-            max-width: 800px; /* 限制内容宽度，优化大屏显示 */
+
+        .star {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 4px;
+            height: 100px;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0), #fff);
+            border-radius: 50%;
+            filter: drop-shadow(0 0 6px #fff);
+            animation: shooting-star 5s linear infinite;
         }
-        ul.count {
-            list-style: none; 
-            padding: 0; 
-            text-align: center; 
+
+        @keyframes shooting-star {
+            0% {
+                transform: rotate(30deg) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(30deg) translateX(-1500px);
+                opacity: 0;
+            }
         }
-        /* 头像圆形边框 */
-        .card img {
-            width: 200px;
-            height: 200px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-        }
-        /* 按钮样式 */
-        .btn {
-            display: inline-block; 
-            background-color: #00008B; 
-            color: #fff; 
-            padding: 8px 16px; 
-            border-radius: 8px; 
-            text-decoration: none; 
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background-color: #000066; 
-        }
-        /* 原有样式优化 */
-        .card {
-            padding: 20px;
-            margin-bottom: 40px; /* 增加间距，让内容更长 */
-        }
-        .excerpt {
-            color: #00008B;
-            line-height: 1.8;
-        }
-        .footer small {
-            color: #00008B;
-        }
-        /* 页脚固定在底部上方 */
-        .footer {
-            position: relative;
-            margin-top: 50px;
-            padding: 20px 0;
-        }
-        /* 新增：手写体方块样式 */
+
+        .star:nth-child(1) { top: 0; right: 15%; animation-delay: 0s; }
+        .star:nth-child(2) { top: 50%; right: 30%; animation-delay: 1.5s; }
+        .star:nth-child(3) { top: 10%; right: 50%; animation-delay: 3s; }
+        .star:nth-child(4) { top: 80%; right: 70%; animation-delay: 4.5s; animation-duration: 6s; }
+        .star:nth-child(5) { top: 30%; right: 90%; animation-delay: 2.5s; }
+        .star:nth-child(6) { top: 60%; right: 5%; animation-delay: 5.5s; animation-duration: 4s; }
+        .star:nth-child(7) { top: 15%; right: 25%; animation-delay: 7s; }
+        .star:nth-child(8) { top: 75%; right: 45%; animation-delay: 0.5s; animation-duration: 7s; }
+        .star:nth-child(9) { top: 40%; right: 65%; animation-delay: 3.5s; animation-duration: 3s; }
+        .star:nth-child(10) { top: 95%; right: 85%; animation-delay: 6.5s; }
+
+
+        /* --- NEW TYPOGRAPHY OPTIMIZATION: HANDWRITTEN BOX --- */
+
         .handwritten-box {
-            font-family: 'Ma Shan Zheng', cursive; /* 手写字体 */
-            font-size: 22px; /* 字号放大 */
-            color: #0099CC; 
-            background-color: rgba(255, 255, 255, 0.45); /* 浅白色背景 */
-            padding: 20px;
+            /* 模拟手写字迹的字体，需要系统或引入自定义字体 */
+            /* 如果有自定义字体，请使用: font-family: 'Handwriting Font', cursive; */
+            font-family: 'Hannotate SC', 'KaiTi', 'Times New Roman', cursive;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin: 15px auto;
+            padding: 15px;
+            width: 80%; /* 限制宽度 */
+            max-width: 400px;
+            background-color: rgba(255, 255, 255, 0.85); /* 半透明背景 */
+            border: 2px solid #00008B; /* 深蓝色边框 */
             border-radius: 10px;
-            margin: 35px auto;
-            max-width: 450px;
-            text-align: left; /* 左对齐更像手写 */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 轻微阴影增加立体感 */
+            box-shadow: 4px 4px 0px 0px #000066; /* 简单的纸张阴影效果 */
+            text-align: left; /* 文本左对齐，更像笔记 */
+            color: #333;
         }
+        .handwritten-box br {
+            line-height: 0.5; /* 优化换行间距 */
+        }
+        .handwritten-box:first-child {
+            margin-top: 30px; /* 增加第一个方块的上边距 */
+        }
+
+        /* --- ORIGINAL STYLES OPTIMIZATION (Restored and Kept) --- */
+
+        .container { text-align: center; margin: 0 auto; }
+        .side, .card, .post { margin: 0 auto; }
+        ul.count { list-style: none; padding: 0; text-align: center; }
+        .card img { width: 200px; height: 200px; border-radius: 50%; object-fit: cover; }
+        .btn {
+            display: inline-block; background-color: #00008B; color: #fff;
+            padding: 8px 16px; border-radius: 8px; text-decoration: none; margin-top: 10px;
+        }
+        .btn:hover { background-color: #000066; }
+        .card { padding: 20px; }
+        .excerpt { color: #00008B; line-height: 1.8; }
+        .footer small { color: #00008B; }
+        
+        /* 雨滴样式 */
+        #rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+        .rain-drop {
+            position: absolute;
+            width: 1px;
+            background-color: rgba(174, 194, 224, 0.8);
+            transform-origin: top;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translateY(-100vh) scaleY(0.5); }
+            100% { transform: translateY(100vh) scaleY(1); }
+        }
+        
     </style>
 </head>
 <body>
-    <!-- 下雨效果容器 -->
-    <div class="rain" id="rain"></div>
+
+        <div class="shooting-star-container">
+        <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+        <span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span><span class="star"></span>
+    </div>
+    
+    <div id="rain"></div>
 
     <header class="banner">
         <div class="container">
@@ -136,7 +164,6 @@
     <div class="container main">
         <aside class="side">
             <div class="card">
-                <!-- 头像链接：仓库根目录的 ryoko_avatar.png -->
                 <a href="./ryoko_avatar.png">
                     <img src="./ryoko_avatar.png" alt="凉">
                 </a>
@@ -144,7 +171,6 @@
                 <p class="bio">19岁</p>
                 <ul class="count">
                     <li><b>沉迷睡大觉</b></li>
-                    <li><b>坐标深圳</b></li>
                     <li><b>美味的甜品和酷酷的凉酱使我旋转~</b></li>
                 </ul>
                 <a class="btn" href="mailto:3535709441@qq.com">我的邮箱</a>
@@ -153,72 +179,63 @@
                 <h2>我的简介</h2>
                 <p class="excerpt">
                     喜好甜品，旅游，等一切有趣的玩意<br>
-                    包括不限于分析哲学和奇奇怪怪的野史...<br>
                     爱好同人，虽然现在忙的啥也没看（（<br>
                     喜欢eve老师的歌曲OvO~<br>
-                    新奇的番剧请推我,我一定要抽时间看嗷嗷<br>                    
-                </p>  
+                    新奇的番剧烦请推我，我一定要抽时间看呜呜呜
+                </p>
                 
-                <!-- 最近在学的东西：手写体方块 -->
-                <div class="handwritten-box">
+                    <div class="handwritten-box">
                     最近在学的东西：<br>
                     - 小甜品如何不动手就可以吃掉<br>
                     - 完美错过所有浪费时间的杂事<br>
                     - 如何和二哈打成一片和谐共生<br>
                 </div>
-                                
-                <!-- 近期幻想的事：手写体方块 -->
+                
                 <div class="handwritten-box">
                     近期幻想的事：<br>
                     - 屏幕前的你打赏我两百万好吗！好的！<br>
                     - 闭上眼睛作业就可以写完<br>
                 </div>
                 
-                <div class="meta"></div>            
-            </article>        
-        </aside>    
-    </div>    
-    <footer class="footer">        
-        <div class="container">            
-            <small>© 2025 贩客  想认识我？来！ fk173201（微信号）</small>        
-        </div>    
+                <div class="meta"></div>
+            </article>
+        </aside>
+    </div>
+    <footer class="footer">
+        <div class="container">
+            <small>© 2025 贩客  想认识我？来！ fk173201（微信号）</small>
+        </div>
     </footer>
-
-    <!-- 标签页标题切换 -->    
-    <script>        
-        const originalTitle = document.title;        
-        document.addEventListener('visibilitychange', () => {            
-            document.title = document.hidden ? '不要我了吗呜呜' : originalTitle;        
+        <script>
+        const originalTitle = document.title;
+        document.addEventListener('visibilitychange', () => {
+            document.title = document.hidden ? '不要我了吗呜呜' : originalTitle;
         });
-
-        // 生成雨滴的JS代码        
-        function createRain() {            
-            const rainContainer = document.getElementById('rain');            
+        
+        // 生成雨滴的JS代码
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
             const rainCount = 150; // 雨滴数量，可调整
-
-            for (let i = 0; i < rainCount; i++) {                
-                const drop = document.createElement('div');                
-                drop.classList.add('rain-drop');                                
-                // 随机位置、长度、速度、延迟                
-                const left = Math.random() * 100; // 水平位置                
-                const height = Math.random() * 15 + 5; // 雨滴长度                
-                const duration = Math.random() * 2 + 0.5; // 下落速度                
-                const delay = Math.random() * 5; // 延迟下落                                
-                drop.style.left = `${left}%`;                
-                drop.style.height = `${height}px`;                
-                drop.style.animationDuration = `${duration}s`;                
-                drop.style.animationDelay = `${delay}s`;                                
-                rainContainer.appendChild(drop);            
-            }        
+            for (let i = 0; i < rainCount; i++) {
+                const drop = document.createElement('div');
+                drop.classList.add('rain-drop');
+                // 随机位置、长度、速度、延迟
+                const left = Math.random() * 100; // 水平位置
+                const height = Math.random() * 15 + 5; // 雨滴长度
+                const duration = Math.random() * 2 + 0.5; // 下落速度
+                const delay = Math.random() * 5; // 延迟下落
+                drop.style.left = `${left}%`;
+                drop.style.height = `${height}px`;
+                drop.style.animationDuration = `${duration}s`;
+                drop.style.animationDelay = `${delay}s`;
+                rainContainer.appendChild(drop);
+            }
         }
-
-        // 页面加载后生成雨滴        
-        window.onload = createRain;    
+        // 页面加载后生成雨滴
+        window.onload = createRain;
     </script>
 </body>
 </html>
-
-
 
 
 
