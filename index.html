@@ -1,241 +1,204 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>今天想不开也吃草吗？</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            position: relative;
-            margin: 0;
-            padding: 0;
-            /* 鼠标指针：仓库根目录的 ryoko_cursor.png */
-            cursor: url('./ryoko_cursor.png'), auto;
-        }
-        /* 背景图：仓库根目录的 bg_main.jpg */
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('./bg_main.jpg');
-            background-size: cover;
-            background-repeat: no-repeat;
-            background-position: center;
-            opacity: 0.5;
-            z-index: -1;
-        }
+    <meta charset="UTF-8">
+    <title>今天想不开也吃草吗？</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh; /* 确保页面高度铺满屏幕 */
+            cursor: url('./ryoko_cursor.png'), auto;
+        }
+        /* 背景图 */
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('./bg_main.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center;
+            opacity: 0.5;
+            z-index: -1;
+        }
 
-        /* --- SHOOTING STAR EFFECT STYLES --- */
-
-        /* Container to position the stars correctly */
+        /* --- 优化后的流星效果 --- */
         .shooting-star-container {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            pointer-events: none; /* Allows clicks to pass through */
+            pointer-events: none;
             z-index: 0;
             overflow: hidden;
         }
 
         .star {
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 4px; /* Slender and natural width */
-            height: 100px; /* Long tail */
-            background: linear-gradient(to top, rgba(255, 255, 255, 0), #fff); /* Fades out for a natural tail */
+            background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
             border-radius: 50%;
-            filter: drop-shadow(0 0 6px #fff); /* Soft glow */
-            animation: shooting-star 5s linear infinite; /* Animation name, duration, timing, loop */
+            filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.8)); /* 更柔和的光晕 */
+            animation: shooting-star linear forwards;
+            opacity: 0;
         }
 
-        /* Keyframe animation for the shooting star path */
+        /* 更自然的流星轨迹动画 */
         @keyframes shooting-star {
             0% {
-                transform: rotate(30deg) translateX(0);
+                transform: translateX(0) translateY(0);
                 opacity: 0;
             }
             10% {
-                opacity: 1; /* Fade in quickly */
+                opacity: 1; /* 缓慢显现 */
             }
-            80% {
-                opacity: 1;
+            90% {
+                opacity: 0.8;
             }
             100% {
-                transform: rotate(30deg) translateX(-1500px); /* Travels across the screen */
-                opacity: 0; /* Fade out */
+                transform: translateX(calc(-100vw - 200px)) translateY(calc(100vh * 0.5));
+                opacity: 0; /* 自然消失 */
             }
         }
-
-        /* Applying different animation delays and starting positions for variety */
-        .star:nth-child(1) {
-            top: 0;
-            right: 15%;
-            animation-delay: 0s;
-        }
-        .star:nth-child(2) {
-            top: 50%;
-            right: 30%;
-            animation-delay: 1.5s;
-        }
-        .star:nth-child(3) {
-            top: 10%;
-            right: 50%;
-            animation-delay: 3s;
-        }
-        .star:nth-child(4) {
-            top: 80%;
-            right: 70%;
-            animation-delay: 4.5s;
-            animation-duration: 6s; /* Varying duration for speed difference */
-        }
-        .star:nth-child(5) {
-            top: 30%;
-            right: 90%;
-            animation-delay: 2.5s;
-        }
-        .star:nth-child(6) {
-            top: 60%;
-            right: 5%;
-            animation-delay: 5.5s;
-            animation-duration: 4s;
-        }
-        .star:nth-child(7) {
-            top: 15%;
-            right: 25%;
-            animation-delay: 7s;
-        }
-        .star:nth-child(8) {
-            top: 75%;
-            right: 45%;
-            animation-delay: 0.5s;
-            animation-duration: 7s;
-        }
-        .star:nth-child(9) {
-            top: 40%;
-            right: 65%;
-            animation-delay: 3.5s;
-            animation-duration: 3s;
-        }
-        .star:nth-child(10) {
-            top: 95%;
-            right: 85%;
-            animation-delay: 6.5s;
-        }
         
-        /* --- ORIGINAL STYLES OPTIMIZATION --- */
-        
-        /* 内容全局居中 */
-        .container {
-            text-align: center;
-            margin: 0 auto;
-        }
-        .side, .card, .post {
-            margin: 0 auto;
-        }
-        ul.count {
-            list-style: none;
-            padding: 0;
-            text-align: center;
-        }
-        /* 头像：仓库根目录的 ryoko_avatar.png */
-        .card img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        /* 按钮样式 */
-        .btn {
-            display: inline-block;
-            background-color: #00008B;
-            color: #fff;
-            padding: 8px 16px;
-            border-radius: 8px;
-            text-decoration: none;
-            margin-top: 10px;
-        }
-        .btn:hover {
-            background-color: #000066;
-        }
-        /* 原有样式优化 */
-        .card {
-            padding: 20px;
-        }
-        .excerpt {
-            color: #00008B;
-            line-height: 1.8;
-        }
-        .footer small {
-            color: #00008B;
-        }
-    </style>
+        /* --- 原有样式保持不变 --- */
+        .container {
+            text-align: center;
+            margin: 0 auto;
+            position: relative; /* 确保内容在流星上层 */
+            z-index: 1;
+        }
+        .side, .card, .post {
+            margin: 0 auto;
+        }
+        ul.count {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+        .card img {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #00008B;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background-color: #000066;
+        }
+        .card {
+            padding: 20px;
+        }
+        .excerpt {
+            color: #00008B;
+            line-height: 1.8;
+        }
+        .footer small {
+            color: #00008B;
+        }
+    </style>
 </head>
 <body>
+    <div class="shooting-star-container" id="starContainer"></div>
     
-    <div class="shooting-star-container">
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
-        <span class="star"></span>
+    <header class="banner">
+        <div class="container">
+            <strong>哈喽友友们</strong> 这是我的主页~
+        </div>
+    </header>
+    <div class="container main">
+        <aside class="side">
+            <div class="card">
+                <a href="./ryoko_avatar.png">
+                    <img src="./ryoko_avatar.png" alt="凉">
+                </a>
+                <h1 class="name">贩客</h1>
+                <p class="bio">19岁</p>
+                <ul class="count">
+                    <li><b>沉迷睡大觉</b></li>
+                    <li><b>美味的甜品和酷酷的凉酱使我旋转~</b></li>
+                </ul>
+                <a class="btn" href="mailto:3535709441@qq.com">我的邮箱</a>
+            </div>
+            <article class="post">
+                <h2>我的简介</h2>
+                <p class="excerpt">
+                    喜好甜品，旅游，等一切有趣的玩意<br>
+                    爱好同人，虽然现在忙的啥也没看（（<br>
+                    喜欢eve老师的歌曲OvO~<br>
+                    新奇的番剧烦请推我，我一定要抽时间看呜呜呜
+                </p>
+                <div class="meta"></div>
+            </article>
+        </aside>
     </div>
-    
-    <header class="banner">
-        <div class="container">
-            <strong>哈喽友友们</strong> 这是我的主页~
-        </div>
-    </header>
-    <div class="container main">
-        <aside class="side">
-            <div class="card">
-                                <a href="./ryoko_avatar.png">
-                    <img src="./ryoko_avatar.png" alt="凉">
-                </a>
-                <h1 class="name">贩客</h1>
-                <p class="bio">19岁</p>
-                <ul class="count">
-                    <li><b>沉迷睡大觉</b></li>
-                    <li><b>美味的甜品和酷酷的凉酱使我旋转~</b></li>
-                </ul>
-                <a class="btn" href="mailto:3535709441@qq.com">我的邮箱</a>
-            </div>
-            <article class="post">
-                <h2>我的简介</h2>
-                <p class="excerpt">
-                    喜好甜品，旅游，等一切有趣的玩意<br>
-                    爱好同人，虽然现在忙的啥也没看（（<br>
-                    喜欢eve老师的歌曲OvO~<br>
-                    新奇的番剧烦请推我，我一定要抽时间看呜呜呜
-                </p>
-                <div class="meta"></div>
-            </article>
-        </aside>
-    </div>
-    <footer class="footer">
-        <div class="container">
-            <small>© 2025 贩客  想认识我？来！ fk173201（微信号）</small>
-            <p>
-                            </p>
-        </div>
-    </footer>
-        <script>
-        const originalTitle = document.title;
-        document.addEventListener('visibilitychange', () => {
-            document.title = document.hidden ? '不要我了吗呜呜' : originalTitle;
-        });
-    </script>
+    <footer class="footer">
+        <div class="container">
+            <small>© 2025 贩客  想认识我？来！ fk173201（微信号）</small>
+        </div>
+    </footer>
+
+    <script>
+        const originalTitle = document.title;
+        document.addEventListener('visibilitychange', () => {
+            document.title = document.hidden ? '不要我了吗呜呜' : originalTitle;
+        });
+
+        // --- 动态生成自然纤细的流星 ---
+        const starContainer = document.getElementById('starContainer');
+        
+        function createStar() {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            
+            // 随机参数让流星更自然
+            const width = Math.random() * 1.5 + 0.5; // 0.5-2px 更纤细
+            const height = width * Math.random() * 20 + 10; // 长度随机（10-30倍宽度）
+            const startX = window.innerWidth + 200; // 从屏幕右侧外开始
+            const startY = Math.random() * window.innerHeight * 0.8; // 垂直位置随机
+            const duration = Math.random() * 4 + 2; // 动画时长2-6秒（速度不同）
+            const angle = Math.random() * 10 + 20; // 倾斜角度20-30度
+            
+            // 设置流星样式
+            star.style.width = `${width}px`;
+            star.style.height = `${height}px`;
+            star.style.right = `${startX}px`;
+            star.style.top = `${startY}px`;
+            star.style.transform = `rotate(${angle}deg)`;
+            star.style.animationDuration = `${duration}s`;
+            star.style.animationDelay = `${Math.random() * 2}s`; // 随机延迟
+            
+            // 添加到容器
+            starContainer.appendChild(star);
+            
+            // 动画结束后移除，避免DOM堆积
+            setTimeout(() => {
+                star.remove();
+            }, (duration + 2) * 1000);
+        }
+        
+        // 每隔1-3秒生成一颗流星
+        setInterval(createStar, Math.random() * 2000 + 1000);
+        
+        // 初始化生成几颗流星
+        for (let i = 0; i < 3; i++) {
+            setTimeout(createStar, Math.random() * 3000);
+        }
+    </script>
 </body>
 </html>
 
