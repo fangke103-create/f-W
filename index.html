@@ -79,27 +79,11 @@
             display: inline-block;
             border-radius: 50%;
         }
-        /* 动态条纹边框（伪元素实现） */
-        .avatar-frame::before {
-            content: "";
-            position: absolute;
-            inset: -8px; /* 边框厚度（比头像大8px） */
-            border-radius: 50%;
-            /* 蓝白条纹背景（匹配你提供的头像样式） */
-            background: repeating-linear-gradient(
-                45deg,
-                #4169e1,  /* 深蓝色条纹 */
-                #4169e1 5px,
-                #ffffff 5px, /* 白色条纹 */
-                #ffffff 10px
-            );
-            animation: borderSpin 3s linear infinite; /* 3秒循环旋转 */
-            z-index: -1; /* 边框在头像下方 */
-        }
+       
         /* 头像圆形边框 */
         .card img {
-            width: 300px;
-            height: 300px; 
+            width: 280px;
+            height: 280px; 
             border-radius: 50%; 
             object-fit: cover; 
         }
@@ -242,3 +226,4 @@
     </script>
 </body>
 </html>
+
